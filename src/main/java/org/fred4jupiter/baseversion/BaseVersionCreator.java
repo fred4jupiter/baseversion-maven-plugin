@@ -7,23 +7,24 @@ import org.apache.commons.lang3.CharSetUtils;
  */
 public class BaseVersionCreator {
 
-    public String createBaseVersionFrom(String versionNumber, int numberOfDigits) {
+    public String createBaseVersionFrom(String versionNumber, int numberOfDigitsInResult) {
         String baseVersion = removeSnapshotString(versionNumber);
         int numberOfDots = getNumberOfDots(baseVersion);
         int existentDigits = numberOfDots + 1;
 
-        if (existentDigits == numberOfDigits) {
+        if (existentDigits == numberOfDigitsInResult) {
             return baseVersion;
         }
 
-        if (existentDigits < numberOfDigits) {
-            int digitsToAdd = numberOfDigits - existentDigits;
+        if (existentDigits < numberOfDigitsInResult) {
+            int digitsToAdd = numberOfDigitsInResult - existentDigits;
             for (int i = 0; i < digitsToAdd; i++) {
                 baseVersion = baseVersion + ".0";
             }
             return baseVersion;
         } else {
-            return getVersionWithMaxDots(baseVersion, numberOfDigits - 1);
+            int dotsInResult = numberOfDigitsInResult - 1;
+            return getVersionWithMaxDots(baseVersion, dotsInResult);
         }
     }
 
@@ -36,14 +37,19 @@ public class BaseVersionCreator {
         return versionNumber.substring(0, indexBeginningSnapshot);
     }
 
-    private String getVersionWithMaxDots(String baseVersion, int dots) {
+    private String getVersionWithMaxDots(String baseVersion, int dotsInResult) {
+        if (dotsInResult == 0) {
+            int indexOfFirstDot = baseVersion.indexOf('.');
+            return baseVersion.substring(0, indexOfFirstDot);
+        }
+
         int countDots = 0;
         for (int i = 0; i < baseVersion.length(); i++) {
             char ch = baseVersion.charAt(i);
             if (ch == '.') {
                 countDots++;
             }
-            if (countDots == dots) {
+            if (countDots == dotsInResult) {
                 return baseVersion.substring(0, (i + 2));
             }
         }
