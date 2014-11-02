@@ -2,6 +2,9 @@ package org.fred4jupiter.baseversion;
 
 import org.apache.commons.lang3.CharSetUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by michael on 02.11.2014.
  */
@@ -43,18 +46,19 @@ public class BaseVersionCreator {
             return baseVersion.substring(0, indexOfFirstDot);
         }
 
+        Map<Integer, Integer> dotNumberIndexMap = new HashMap<>();
+
         int countDots = 0;
         for (int i = 0; i < baseVersion.length(); i++) {
             char ch = baseVersion.charAt(i);
             if (ch == '.') {
                 countDots++;
-            }
-            if (countDots == dotsInResult) {
-                return baseVersion.substring(0, (i + 2));
+                dotNumberIndexMap.put(countDots, i);
             }
         }
 
-        return "";
+        Integer indexForCut = dotNumberIndexMap.get(dotsInResult + 1);
+        return baseVersion.substring(0, indexForCut);
     }
 
     private int getNumberOfDots(String baseVersion) {
