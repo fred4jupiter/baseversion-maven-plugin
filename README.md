@@ -1,7 +1,7 @@
 baseversion-maven-plugin
 ========================
 
-Extracts the base version number from maven project. E.g. base version of 1.0.0-SNAPSHOT is 1.0
+Extracts the base version number from maven project. This will be useful if your project is management in a continuous delivery pipeline and the version number should contain the build number. In this case you have to concat the base version number of your project with the build number digit. See examples below.
 
 ## Usage ##
 
